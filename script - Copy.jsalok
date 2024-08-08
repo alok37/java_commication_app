@@ -1,0 +1,180 @@
+    const registervalidate = () => {
+        var checkFlag = 0;
+        var checkStr = '';
+        const fullname = document.getElementById("fullname").value;
+        if( fullname == ''){
+            checkStr += '\n Please enter fullname';
+            checkFlag = 1;
+        }else{
+            document.getElementById('fullname').value=fullname; 
+        }
+
+        const email = document.getElementById("email").value;
+        if( email == ''){
+            checkStr += '\n Please enter email';
+            checkFlag = 1;
+        }else{
+            filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (filter.test(email)) {
+                //
+            }
+            else
+            {
+                checkStr += '\n Please enter valid email';
+                checkFlag = 1;
+            }
+            document.getElementById('email').value=email; 
+        }
+
+        if (localStorage.getItem("users") === null) {
+            //
+        }else{
+            var chk_users = JSON.parse(localStorage.getItem("users"));
+            var userexist = 0;
+            if(chk_users === null ) {
+                    //
+            }else{                          
+                for (var i = 0; i < chk_users.length; i++) {
+                    if(chk_users[i].email == email ){
+                        userexist = 1;
+                    }
+                }
+            }
+        }
+
+        if( userexist == 1 ){
+            checkStr += "\n Email id :" + email + " already exists.";
+            checkFlag = 1;
+        }        
+        const password = document.getElementById("password").value;
+        if( password == ''){
+            checkStr += '\n Please enter password';
+            checkFlag = 1;
+        }else{
+            const confirm_password = document.getElementById("confirm_password").value;
+            if( confirm_password == ''){
+                checkStr += '\n Please enter confirm_password';
+                checkFlag = 1;
+            }else{
+                const plength = password.length;
+                if( plength < 8 ){
+                    checkStr += '\n Please enter password upto 8 characters';
+                    checkFlag = 1;
+                }
+                if( password != confirm_password ){
+                    checkStr += '\n Please enter same password and confirm_password';
+                    checkFlag = 1;
+                }
+            }
+        }
+
+
+
+        // Start to user listing
+        if( checkFlag != 1 ){
+            var users = localStorage.getItem("users") ? JSON.parse(localStorage.getItem("users")) : [];
+            var user = {
+                id: Number(new Date()),
+                fullname: fullname,
+                email: email,
+                password: password
+            }
+            users.push(user);
+            localStorage.setItem("users", JSON.stringify(users));
+            //console.log("user:"+users);
+            
+            alert("users:" + JSON.stringify(users) );
+            Window.Location = "/registration_success.html";
+
+           // return true;
+        }else{
+            alert("Required:" +checkStr );
+        }   
+        // End to user listing
+    }
+
+
+    const validateLogin = () => {
+        alert("ZZZS");
+        var checkStr = '';
+        var userexist = 0;
+        var checkFlag = 0;
+        alert("ZZZS 1");
+        const login_id = '';
+        const fullname = '';
+        const email = document.getElementById("email").value;
+        if( email == ''){
+            checkStr += '\n Please enter email';
+            checkFlag = 1;
+        }else{
+            filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (filter.test(email)) {
+                //
+            }
+            else
+            {
+                checkStr += '\n Please enter valid email';
+                checkFlag = 1;
+            }
+            document.getElementById('email').value=email; 
+        }
+
+        const password = document.getElementById("password").value;
+        if( password == ''){
+            checkStr += '\n Please enter password';
+            checkFlag = 1;
+        }
+        if( checkFlag != 1){
+            if (localStorage.getItem("users") === null) {
+
+            }else{
+                var chk_users = JSON.parse(localStorage.getItem("users"));
+                alert("ZZZS2");
+                if(chk_users === null ) {
+                        //
+                }else{                          
+                    for (var i = 0; i < chk_users.length; i++) {
+
+                        checkStr += 'Email : ' + chk_users[i].email + '|| Password:'+chk_users[i].password  + '|| id:'+chk_users[i].id ;
+                        
+                        alert("ZZZS3:"+ checkStr + 'email1:' + email + '|| Password : ' + password  );
+                        //  && chk_users[i].password == password 
+                        if(chk_users[i].email == email){
+                            userexist = 1;
+                            login_id = chk_users[i].id;
+                            fullname  = chk_users[i].fullname;
+
+                            alert("ZZZS4:"+ checkStr + 'email1:' + email + '|| Password : ' + password  );
+
+                        }
+                    }
+                }
+            }
+        }
+        if( userexist == 1){
+            alert("login successfull");
+            alert(checkStr);
+             
+            if (localStorage.getItem("login_user") === null) {
+                //
+            }else{
+                ////////
+                localStorage.removeItem("login_user");
+                var login_user = localStorage.getItem("login_user") ? JSON.parse(localStorage.getItem("login_user")) : [];
+                var logeduser = {
+                    id: login_id,
+                    fullname: fullname,
+                    email: email,
+                    password: password
+                }
+                login_user.push(logeduser);
+                localStorage.setItem("login_user", JSON.stringify(login_user));
+                //////// 
+            }
+            alert("login successfull 1");
+        }else{
+            alert("Not login");
+            alert(checkStr);
+        }
+        return false;
+    }

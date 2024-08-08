@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Communication Application using Javascript and local storage</title>
+    <link href="./bootstrap/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/style.css" rel="stylesheet">
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function codeUserList() {
+            const userIdU = getQueryParam('id');
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const user = users.find(u => u.id == userIdU);
+
+            if (user) {
+                document.getElementById('userId').value = user.id;
+                document.getElementById('email').value = user.email;
+                document.getElementById('fullname').value = user.fullname;
+            } else {
+                alert("User not found");
+            }
+        }
+
+        function saveUser(event) {
+            event.preventDefault();
+
+            const userId = document.getElementById('userId').value;
+            const updatedFullname = document.getElementById('fullname').value;
+            const updatedEmail = document.getElementById('email').value;
+
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            const userIndex = users.findIndex(u => u.id == userId);
+
+            if (userIndex !== -1) {
+                users[userIndex].fullname = updatedFullname;
+                users[userIndex].email = updatedEmail;
+                localStorage.setItem('users', JSON.stringify(users));
+                alert("User information updated successfully");
+                window.location.href = 'userlist.html';
+            } else {
+                alert("User not found");
+            }
+        }
+
+        window.onload = function() {
+            codeUserList();
+            document.getElementById('editUserForm').addEventListener('submit', saveUser);
+        };
+    </script>
+</head>
+
+<body class="text-center">
+    <main class="form-signin">
+        <form id="editUserForm">
+            <h1 class="h3 mb-3 fw-normal">Edit User Information</h1>
+            <div class="row align-items-center pt-4 pb-3">
+                <div class="col-md-4 ps-5">
+                    <h6 class="mb-0">Full Name</h6>
+                </div>
+                <div class="col-md-8 pe-5">
+                    <input type="text" class="form-control form-control-lg" name="fullname" placeholder="Full Name" id="fullname" required>
+                </div>
+            </div>
+
+            <div class="row align-items-center pt-4 pb-3">
+                <div class="col-md-4 ps-5">
+                    <h6 class="mb-0">Email</h6>
+                </div>
+                <div class="col-md-8 pe-5">
+                    <input type="email" class="form-control form-control-lg" name="email" placeholder="Email" id="email" required>
+                    <input type="hidden" class="form-control form-control-lg" name="userID" id="userId">
+                </div>
+            </div>
+
+            <div class="row align-items-center pt-4 pb-3">
+                <div class="col-md-4 ps-5">&nbsp;</div>
+                <div class="col-md-8 pe-5">
+                    <button class="w-70 btn btn-lg btn-primary" type="submit">Save</button>
+                </div>
+            </div>
+        </form>
+    </main>
+</body>
+
+</html>

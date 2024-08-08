@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Communication Application using Javascript and local storage</title>
+  <!-- <link href="../assets/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-fixed/">
+
+  <style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    .ul_minu {
+      display: flex;
+      list-style: none;
+      width: 100%;
+      height: 50px;
+    }
+
+    .mn_nav {
+      width: 25%;
+      color: #000;
+      background-color: #e0d9d9;
+      border: 1px solid #000;
+    }
+
+    .mn_navwht {
+      width: 25%;
+      color: #000;
+      background-color: #fff;
+      border: 1px solid #000;
+    }
+
+    .mn_nav a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    .mn_navwht a {
+      color: #000;
+      text-decoration: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+
+      .mn_nav {
+        width: 100%;
+        color: #000;
+        background-color: #e0d9d9;
+        border: 1px solid #000;
+      }
+
+      .mn_navwht {
+        width: 100%;
+        color: #000;
+        background-color: #fff;
+        border: 1px solid #000;
+      }
+
+      .ul_minu {
+        display: flex;
+        list-style: none;
+        width: 100%;
+        height: 70px !important;
+      }
+    }
+  </style>
+  <!-- Custom styles for this template -->
+  <link href="../users/bootstrap/assets/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="navbar-top-fixed.css" rel="stylesheet">
+  <script>
+
+    function codeUserList() {
+      //
+      var table = document.getElementById("userTable");
+
+
+
+      if (localStorage.getItem("users") === null) {
+        //
+      } else {
+        var chk_users1 = JSON.parse(localStorage.getItem("users"));
+        if (chk_users1 === null) {
+          //
+        } else {
+          for (var i = 0; i < chk_users1.length; i++) {
+
+            var row = table.insertRow(0);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            cell1.innerHTML = chk_users1[i].fullname;
+            cell2.innerHTML = chk_users1[i].email;
+            //cell3.innerHTML = "";
+
+            cell3.innerHTML = '<a href="edit_user.html?id=' + chk_users1[i].id + '" >Edit</a>|<a onclick="deleteUser(' + chk_users1[i].id + ')" >Delete</a>';
+
+          }
+
+        }
+      }
+
+      //
+    }
+    window.onload = codeUserList;
+
+    function deleteUser(idd) {
+      var result = confirm("Are you sure ?");
+      if (result) {
+        var users = [];
+        var chk_users1 = JSON.parse(localStorage.getItem("users"));
+        if (chk_users1 === null) {
+          //
+        } else {
+          for (var i = 0; i < chk_users1.length; i++) {
+
+            const chkfullname = chk_users1[i].fullname;
+            const chkEmail = chk_users1[i].email;
+            const chkPassword = chk_users1[i].password;
+            const chkId = chk_users1[i].id;
+
+            if (idd != chkId) {
+              var user = {
+                id: chkId,
+                fullname: chkfullname,
+                email: chkEmail,
+                password: chkPassword
+              }
+              users.push(user);
+            }
+          }
+
+          localStorage.removeItem("users");
+          localStorage.setItem("users", JSON.stringify(users));
+          location.reload();
+        }
+
+
+      }
+
+    }
+
+  </script>
+</head>
+
+<body class="text-center">
+  <div class="container">
+    <div class="">
+      <ul class="ul_minu">
+        <li class="nav-item_li mn_nav">
+          <a class="" aria-current="page" href="chat_group.html">Group Chat</a>
+        </li>
+        <li class="nav-item_li mn_navwht">
+          <a class="" href="userlist.html">Manage Users</a>
+        </li>
+        <li class="nav-item_li mn_nav">
+          <a class="" href="upload.html" tabindex="-1" aria-disabled="true">Manage Documents</a>
+        </li>
+        <li class="nav-item_li mn_nav">
+          <a class="" href="logout.html" tabindex="-1" aria-disabled="true">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <h3 style="float:left; text-align: left;">User List</h3>
+    <table class="table table-striped table-hover" style="background-color: #ccc;">
+      <thead>
+        <tr style="background-color: #ccc; width:100%;">
+          <th>Name</th>
+          <th>User Email ID</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="userTable"></tbody>
+    </table>
+  </div>
+
+  <script src="../assets/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
